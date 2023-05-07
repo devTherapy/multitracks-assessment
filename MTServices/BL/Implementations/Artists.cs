@@ -4,6 +4,7 @@ using MTModels.DTOs;
 using MTModels.Entities;
 using MTServices.BL.Interfaces;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace MTServices.BL.Implementations
 {
@@ -12,22 +13,16 @@ namespace MTServices.BL.Implementations
         private readonly IConfiguration _configuration;
         private readonly string? _connectionString;
         private SQL _sql;
-
         public Artists(IConfiguration configuration)
         {
             _configuration = configuration;
             _connectionString = _configuration["ConnectionString"];
         }
 
-        public Response<GetArtistDto> GetArtistByName(string name)
+        public Response<GetArtistDto> GetArtistByName(SearchArtists artists)
         {
 
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                return new Response<GetArtistDto>(false, "Please enter a valid name input", System.Net.HttpStatusCode.BadRequest);
-            }
-
-            name = name.Trim();
+            var name = artists.Name.Trim();
 
             try
             {
@@ -37,11 +32,11 @@ namespace MTServices.BL.Implementations
 
                 _sql.Parameters.Add("@SearchTerm", name);
 
-                var reader = _sql.ExecuteStoredProcedureDataReader("GetArtistsByName");
+                using var reader = _sql.ExecuteStoredProcedureDataReader("GetArtistsByName");
 
                 var response = new GetArtistDto();
 
-                while (reader.Read())
+                while (reader?.Read() == true)
                 {
                     var artist = new Artist
                     {

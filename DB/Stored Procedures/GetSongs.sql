@@ -7,11 +7,11 @@ BEGIN
 
 
 
-	SELECT * FROM Song
+	SELECT * FROM Song (NOLOCk)
 	ORDER BY dateCreation DESC
 	OFFSET (@PageNumber - 1) * @PageSize ROWS
 	FETCH NEXT @PageSize ROWS ONLY
 
-	SELECT COUNT(*) AS TotalCount FROM Song 
+	SELECT COUNT(*) AS TotalCount FROM Song (NOLOCK)
 END
 

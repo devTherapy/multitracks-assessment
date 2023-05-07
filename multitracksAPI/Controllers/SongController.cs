@@ -20,8 +20,6 @@ namespace multitracksAPI.Controllers
         public async Task<IActionResult> GetAllSongs([FromQuery] Paging paging)
         {
             var result = _songs.GetSongs(paging);
-            if (result.Status == HttpStatusCode.OK) return Ok(result);
-            if (result.Status == HttpStatusCode.BadRequest) return BadRequest(result);
             return StatusCode((int)result.Status, result);  
         }
     }

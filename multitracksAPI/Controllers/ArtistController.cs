@@ -17,12 +17,9 @@ namespace multitracksAPI.Controllers
         }
         [HttpGet]
         [Route("search")]
-        public async Task<IActionResult> SearchArtists(string name)
+        public async Task<IActionResult> SearchArtists([FromQuery] SearchArtists artist)
         {
-            var result =  _artists.GetArtistByName(name);
-
-            if (result.Status == HttpStatusCode.OK) return Ok(result); 
-            if (result.Status == HttpStatusCode.BadRequest) return BadRequest(result); 
+            var result =  _artists.GetArtistByName(artist);
             return StatusCode((int)result.Status, result);
         }
 
@@ -31,9 +28,6 @@ namespace multitracksAPI.Controllers
         public async Task<IActionResult> CreateArtist(CreateArtist model)
         {
             var result = _artists.CreateArtist(model);
-
-            if (result.Status == HttpStatusCode.OK) return Ok(result);
-            if (result.Status == HttpStatusCode.BadRequest) return BadRequest(result);
             return StatusCode((int)result.Status, result);
         }
 

@@ -5,7 +5,7 @@ AS
 BEGIN
 
     SELECT *
-    FROM Artist
+    FROM Artist (NOLOCK)
     WHERE title LIKE '%' + @SearchTerm + '%'
 
 END

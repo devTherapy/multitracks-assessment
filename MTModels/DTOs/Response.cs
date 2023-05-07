@@ -30,7 +30,6 @@ namespace MTModels.DTOs
         public string Message { get; set; }
         public HttpStatusCode Status { get; set; }
         public T Data { get; set; }
-        public Metadata? Metadata { get; set; }
     }
 
     public class Metadata

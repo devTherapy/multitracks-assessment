@@ -34,7 +34,7 @@ namespace MTServices.BL.Implementations
 
                 var response = new SongDto();
 
-                var reader = _sql.ExecuteStoredProcedureDataReader("GetSongs");
+                using var reader = _sql.ExecuteStoredProcedureDataReader("GetSongs");
 
                 while (reader.Read())
                 {
