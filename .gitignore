@@ -396,3 +396,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+.gitignore
+.gitattributes
+Web/multitracksAPI/appsettings.json
+Web/multitracksAPI/appsettings.Development.json
