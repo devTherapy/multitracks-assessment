@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MTModels.DTOs;
 using MTServices.BL.Interfaces;
-using System.Net;
 
 namespace multitracksAPI.Controllers
 {
@@ -20,7 +19,7 @@ namespace multitracksAPI.Controllers
         public async Task<IActionResult> GetAllSongs([FromQuery] Paging paging)
         {
             var result = _songs.GetSongs(paging);
-            return StatusCode((int)result.Status, result);  
+            return StatusCode((int)result.Status, result);
         }
     }
 }

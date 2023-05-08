@@ -10,10 +10,7 @@ public partial class Default : MultitracksPage
         var sql = new SQL();
         try
         {
-            //5
-            //31
-            //1321
-          //  throw new NotImplementedException();
+
              sql.Parameters.Add("@ArtistID", 1110);
             var dataset = sql.ExecuteStoredProcedureDS("GetArtistDetails");
             BindData(dataset);

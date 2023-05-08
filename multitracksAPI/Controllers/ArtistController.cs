@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MTModels.DTOs;
 using MTServices.BL.Interfaces;
-using System.Net;
 
 namespace multitracksAPI.Controllers
 {
@@ -19,7 +18,7 @@ namespace multitracksAPI.Controllers
         [Route("search")]
         public async Task<IActionResult> SearchArtists([FromQuery] SearchArtists artist)
         {
-            var result =  _artists.GetArtistByName(artist);
+            var result = _artists.GetArtistByName(artist);
             return StatusCode((int)result.Status, result);
         }
 

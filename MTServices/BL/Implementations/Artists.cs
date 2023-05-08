@@ -4,7 +4,6 @@ using MTModels.DTOs;
 using MTModels.Entities;
 using MTServices.BL.Interfaces;
 using System.Data;
-using System.Data.SqlClient;
 
 namespace MTServices.BL.Implementations
 {
@@ -53,6 +52,7 @@ namespace MTServices.BL.Implementations
                 if (!response.Artists.Any()) return new Response<GetArtistDto>(true, "No record found for this input", System.Net.HttpStatusCode.OK);
 
                 return new Response<GetArtistDto>(true, "operation successful", response, System.Net.HttpStatusCode.OK);
+
             }
             catch (Exception ex)
             {
