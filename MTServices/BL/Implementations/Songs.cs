@@ -16,7 +16,8 @@ namespace MTServices.BL.Implementations
         public Songs(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connectionString = _configuration["ConnectionString"];
+            _connectionString = _configuration["admin"] ?? throw new Exception("connection string not provided");
+            _sql = new SQL(_connectionString, true);
         }
         public Response<SongDto> GetSongs(Paging paging)
         {
@@ -25,20 +26,15 @@ namespace MTServices.BL.Implementations
 
             try
             {
-                if (_connectionString == null) throw new Exception("connection string not provided");
-
                 _sql = new SQL(_connectionString, true);
-
                 _sql.Parameters.Add("@PageSize", pageSize);
                 _sql.Parameters.Add("@PageNumber", pageNumber);
-
-                var response = new SongDto();
-
                 using var reader = _sql.ExecuteStoredProcedureDataReader("GetSongs");
 
+                var response = new SongDto();
                 while (reader.Read())
                 {
-                    var song = new Song
+                    response.SongsList.Add(new Song
                     {
                         SongID = reader.GetInt32("songID"),
                         AlbumID = reader.GetInt32("albumID"),
@@ -54,27 +50,29 @@ namespace MTServices.BL.Implementations
                         SongSpecificPatches = reader.GetBoolean("songSpecificPatches"),
                         ProPresenter = reader.GetBoolean("propresenter"),
                         DateCreation = reader.GetDateTime("dateCreation")
-                    };
-                    response.SongsList.Add(song);
+                    });
                 }
 
                 if (reader.NextResult())
                 {
                     reader.Read();
+                    var totalRecords = reader.GetInt32("TotalCount");
 
                     response.MetaData  = new Metadata
                     {
                         PageSize = pageSize,
                         PageNumer = pageNumber,
                         TotalRecords = reader.GetInt32("TotalCount"),
+                        TotalPages = totalRecords <= 0 ? 0 : totalRecords / pageSize
                     };
                 }
 
-                if (!response.SongsList.Any()) return new Response<SongDto>(true, "No record found for this input", System.Net.HttpStatusCode.OK);
-
+                if (!response.SongsList.Any())
+                {
+                    return new Response<SongDto>(true, "No record found for this input", System.Net.HttpStatusCode.OK);
+                }
                 return new Response<SongDto>(true, "operation successful", response, System.Net.HttpStatusCode.OK);
             }
-
             catch (Exception ex)
             {
                 return new Response<SongDto>(false, ex.Message, System.Net.HttpStatusCode.InternalServerError);

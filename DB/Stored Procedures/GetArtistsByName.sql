@@ -1,11 +1,18 @@
-﻿CREATE PROCEDURE [dbo].[GetArtistsByName]
-	 @SearchTerm NVARCHAR(100)
+﻿CREATE PROCEDURE dbo.GetArtistsByName
+    @searchTerm NVARCHAR(100)
 	
 AS
 BEGIN
+    SET NOCOUNT ON 
 
-    SELECT *
-    FROM Artist (NOLOCK)
-    WHERE title LIKE '%' + @SearchTerm + '%'
+    SELECT 
+        artistID,
+        heroURL, 
+        imageURL, 
+        biography,
+        title, 
+        dateCreation
+    FROM Artist
+    WHERE title LIKE '%' + @searchTerm + '%'
 
 END

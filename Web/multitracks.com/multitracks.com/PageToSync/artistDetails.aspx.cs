@@ -1,46 +1,48 @@
 ﻿using DataAccess;
 using System;
 using System.Data;
+using System.Diagnostics;
 
-public partial class Default : MultitracksPage
+public partial class ArtistDetails : MultitracksPage
 {
+    public ArtistDetails()
+    {
+        Load += Page_Load;
+    }
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        var sql = new SQL();
         try
         {
-
-             sql.Parameters.Add("@ArtistID", 1110);
+            var sql = new SQL();
+            sql.Parameters.Add("@artistID", Request.QueryString["ID"] ?? "52");
             var dataset = sql.ExecuteStoredProcedureDS("GetArtistDetails");
             BindData(dataset);
-
         }
-        catch
+        catch (Exception ex)
         {
-
+            Debug.WriteLine(ex.Message);
         }
+
     }
 
     private void BindData(DataSet dataSet)
     {
-        var artistTable = dataSet.Tables[0];
-        var albumTable = dataSet.Tables[1];
-        var songTable = dataSet.Tables[2];
+        var artists = dataSet.Tables[0];
+        var albums = dataSet.Tables[1];
+        var songs = dataSet.Tables[2];
 
-        AlbumList.DataSource = albumTable;
-
+        AlbumList.DataSource = albums;
         AlbumList.DataBind();
 
-        SongsList.DataSource = songTable;
-
+        SongsList.DataSource = songs;
         SongsList.DataBind();
 
-        heroImage.ImageUrl = artistTable.Rows[0]["heroURL"].ToString();
-        heroImage.Attributes["srcset"] = $"{artistTable.Rows[0]["heroURL"]}, {artistTable.Rows[0]["heroURL"]} 2x";
-        bannerImage.ImageUrl = artistTable.Rows[0]["imageURL"].ToString();
-        bannerImage.Attributes["srcset"] = $"{artistTable.Rows[0]["imageURL"]}, {artistTable.Rows[0]["imageURL"]} 2x";
-        BannerName.Text = artistTable.Rows[0]["title"].ToString(); 
-        Bio.Text = artistTable.Rows[0]["biography"].ToString();
+        heroImage.ImageUrl = artists.Rows[0]["heroURL"].ToString();
+        heroImage.Attributes["srcset"] = $"{artists.Rows[0]["heroURL"]}, {artists.Rows[0]["heroURL"]} 2x";
+        bannerImage.ImageUrl = artists.Rows[0]["imageURL"].ToString();
+        bannerImage.Attributes["srcset"] = $"{artists.Rows[0]["imageURL"]}, {artists.Rows[0]["imageURL"]} 2x";
+        BannerName.Text = artists.Rows[0]["title"].ToString(); 
+        Bio.Text = artists.Rows[0]["biography"].ToString();
     }
 }

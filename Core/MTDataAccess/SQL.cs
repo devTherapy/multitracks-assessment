@@ -39,14 +39,16 @@ namespace DataAccess
 				connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ToString();
 		}
 
+		//added this due to difficulties using configuration manager to read from appsettings.json
         public SQL(string connectionStrings, bool passed)
         {
             if (passed)
             {
-				connectionString = connectionStrings;
+                connectionString = connectionStrings;
             }
         }
-		public SQL(string connectionStringName, int timeout)
+
+        public SQL(string connectionStringName, int timeout)
 			: this(connectionStringName)
 		{
 			Timeout = timeout;

@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="artistDetails.aspx.cs" Inherits="Default" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="artistDetails.aspx.cs" Inherits="ArtistDetails" EnableViewState="false" %> 
 
 <!DOCTYPE html>
 <html lang="en">
