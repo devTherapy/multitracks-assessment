@@ -18,6 +18,12 @@ public partial class Default : MultitracksPage
             var dataset = sql.ExecuteStoredProcedureDS("GetArtistDetails");
             BindData(dataset);
 
+
+            SetTables(dataset);
+            //assessmentItems.DataSource = data;
+            //assessmentItems.DataBind();
+            // publishDB.Visible = false;
+            //items.Visible = true;
         }
         catch
         {
@@ -31,9 +37,22 @@ public partial class Default : MultitracksPage
         var albumTable = dataSet.Tables[1];
         var songTable = dataSet.Tables[2];
 
+        //artistName = artistTable.Rows[0]["Title"].ToString();
+        //albumName = albumTable.Rows[0]["Title"].ToString();
+
+        //prepare album data
+        //albumTable.Columns.Add("ArtistName", typeof(string));
+
+        //albumTable.Rows[0]["ArtistName"] = artistName;
+
         AlbumList.DataSource = albumTable;
 
         AlbumList.DataBind();
+
+        //prepare song data
+        //songTable.Columns.Add("AlbumName", typeof(string));
+
+        //songTable.Rows[0]["AlbumName"] = albumName;
 
         SongsList.DataSource = songTable;
 
