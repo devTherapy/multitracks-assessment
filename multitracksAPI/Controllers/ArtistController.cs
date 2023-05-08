@@ -29,7 +29,5 @@ namespace multitracksAPI.Controllers
             var result = _artists.CreateArtist(model);
             return StatusCode((int)result.Status, result);
         }
-
-
     }
 }

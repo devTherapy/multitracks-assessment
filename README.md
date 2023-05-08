@@ -12,3 +12,7 @@ To get started:
 - Open the solution in Visual Studio	
 - Run "Update-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -r" from the Package Manager Console	
 - Finally run the project for further instructions
+
+## Project notes
+
+- To get the details of a specific artist, you can pass in artist ID as a query string parameter.

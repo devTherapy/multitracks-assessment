@@ -15,29 +15,23 @@ namespace MTServices.BL.Implementations
         public Artists(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connectionString = _configuration["ConnectionString"];
+            _connectionString = _configuration["admin"] ?? throw new Exception("connection string not provided");
+            _sql = new SQL(_connectionString, true);
         }
 
         public Response<GetArtistDto> GetArtistByName(SearchArtists artists)
         {
 
-            var name = artists.Name.Trim();
-
             try
             {
-                if (_connectionString == null) throw new Exception("connection string not provided");
-
-                _sql = new SQL(_connectionString, true);
-
-                _sql.Parameters.Add("@SearchTerm", name);
-
+                _sql.Parameters.Add("@searchTerm", artists.Name.Trim());
                 using var reader = _sql.ExecuteStoredProcedureDataReader("GetArtistsByName");
 
                 var response = new GetArtistDto();
 
-                while (reader?.Read() == true)
+                while (reader.Read())
                 {
-                    var artist = new Artist
+                    response.Artists.Add(new Artist
                     {
                         ArtistID = reader.GetInt32("artistID"),
                         Title = reader.GetString("title"),
@@ -45,11 +39,13 @@ namespace MTServices.BL.Implementations
                         ImageURL = reader.GetString("imageURL"),
                         HeroURL = reader.GetString("heroURL"),
                         DateCreation = reader.GetDateTime("dateCreation")
-                    };
-
-                    response.Artists.Add(artist);
+                    });
                 }
-                if (!response.Artists.Any()) return new Response<GetArtistDto>(true, "No record found for this input", System.Net.HttpStatusCode.OK);
+
+                if (!response.Artists.Any())
+                {
+                    return new Response<GetArtistDto>(true, "No record found for this input", System.Net.HttpStatusCode.OK);
+                }
 
                 return new Response<GetArtistDto>(true, "operation successful", response, System.Net.HttpStatusCode.OK);
 
@@ -65,10 +61,6 @@ namespace MTServices.BL.Implementations
         {
             try
             {
-                if (_connectionString == null) throw new Exception("connection string not provided");
-
-                _sql = new SQL(_connectionString, true);
-
                 _sql.Parameters.Add("@Title", model.Title);
                 _sql.Parameters.Add("@Bography", model.Bography);
                 _sql.Parameters.Add("@ImageURL", model.ImageURL);
