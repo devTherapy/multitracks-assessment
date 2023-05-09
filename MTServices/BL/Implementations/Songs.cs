@@ -57,13 +57,12 @@ namespace MTServices.BL.Implementations
                 {
                     reader.Read();
                     var totalRecords = reader.GetInt32("TotalCount");
-
                     response.MetaData  = new Metadata
                     {
                         PageSize = pageSize,
                         PageNumer = pageNumber,
-                        TotalRecords = reader.GetInt32("TotalCount"),
-                        TotalPages = totalRecords <= 0 ? 0 : totalRecords / pageSize
+                        TotalRecords = totalRecords,
+                        TotalPages = totalRecords <= 0 ? 0 : (int)Math.Ceiling((double)totalRecords / pageSize)
                     };
                 }
 
